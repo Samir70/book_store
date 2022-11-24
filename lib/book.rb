@@ -1,8 +1,14 @@
 class Book
-    def initialize(hash)
-        @id = hash["id"].to_i
-        @title = hash["title"]
-        @author_name = hash["author_name"]
+    def initialize(id, title, author_name)
+        @id = id.to_i
+        @title = title
+        @author_name = author_name
+    end
+    def self.from(hash)
+        return Book.new(hash["id"], hash["title"], hash["author_name"])
+        # @id = hash["id"].to_i
+        # @title = hash["title"]
+        # @author_name = hash["author_name"]
     end
 
     def to_s
