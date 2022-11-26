@@ -27,9 +27,7 @@ RSpec.describe BookRepository do
     it "has correct data for first record" do
       repo = BookRepository.new
       book = repo.all.first
-      expect(book.id).to eq 1
-      expect(book.title).to eq "Nineteen Eighty-Four"
-      expect(book.author_name).to eq "George Orwell"
+      expect(book).to eq Book.new(1, "Nineteen Eighty-Four", "George Orwell")
     end
   end
 end
