@@ -64,18 +64,22 @@ class Book
 
   # Replace the attributes by your own columns.
   attr_accessor :id, :title, :author
+  :id should be a number
+  :title should be a string
+  :author should be a string
 end
 
 ```
 
-<!-- Bonus features -->
-
 ```ruby
 # 1 can be initialised
+# Needs to be inistialised with 3 strings, since that is what the PG will return
 book = Book.new("1", "title", "me")
 expect(book.id).to eq 1
 expect(book.title).to eq "title"
 expect(book.author_name).to eq "me"
+
+# Bonus features
 
 # 2 can be printed out in a nice way
 book = Book.new("1", "title", "me")
