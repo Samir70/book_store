@@ -41,16 +41,16 @@ Usually, the Model class name will be the capitalised table name (single instead
 
 ```ruby
 # EXAMPLE
-# Table name: students
+# Table name: books
 
 # Model class
-# (in lib/student.rb)
-class Student
+# (in lib/book.rb)
+class Book
 end
 
 # Repository class
-# (in lib/student_repository.rb)
-class StudentRepository
+# (in lib/book_repository.rb)
+class BookRepository
 end
 ```
 
@@ -59,18 +59,32 @@ end
 Define the attributes of your Model class. You can usually map the table columns to the attributes of the class, including primary and foreign keys.
 
 ```ruby
-# EXAMPLE
-# Table name: students
 
-# Model class
-# (in lib/student.rb)
-
-class Student
+class Book
 
   # Replace the attributes by your own columns.
-  attr_accessor :id, :name, :cohort_name
+  attr_accessor :id, :title, :author
 end
 
+```
+
+<!-- Bonus features -->
+
+```ruby
+# 1 can be initialised
+book = Book.new("1", "title", "me")
+expect(book.id).to eq 1
+expect(book.title).to eq "title"
+expect(book.author_name).to eq "me"
+
+# 2 can be printed out in a nice way
+book = Book.new("1", "title", "me")
+expect(book.to_s).to eq "1 - title - me"
+
+# 3 can be initialised from a hash
+h = { "id" => "1", "title" => "title", "author_name" => "me" }
+book = Book.from_hash(h)
+expect(book.to_s).to eq "1 - title - me"
 ```
 
 
@@ -81,41 +95,29 @@ Your Repository class will need to implement methods for each "read" or "write" 
 Using comments, define the method signatures (arguments and return value) and what they do - write up the SQL queries that will be used by each method.
 
 ```ruby
-# EXAMPLE
-# Table name: students
 
-# Repository class
-# (in lib/student_repository.rb)
-
-class StudentRepository
+class BookRepository
 
   # Selecting all records
   # No arguments
   def all
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students;
+    # SELECT * FROM books;
 
-    # Returns an array of Student objects.
+    # Returns an array of Book objects.
   end
 
-  # Gets a single record by its ID
-  # One argument: the id (number)
-  def find(id)
-    # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students WHERE id = $1;
-
-    # Returns a single Student object.
-  end
+  
 
   # Add more methods below for each operation you'd like to implement.
 
-  # def create(student)
+  # def create(book)
   # end
 
-  # def update(student)
+  # def update(book)
   # end
 
-  # def delete(student)
+  # def delete(book)
   # end
 end
 ```
@@ -129,33 +131,27 @@ These examples will later be encoded as RSpec tests.
 ```ruby
 # EXAMPLES
 
-# 1
-# Get all students
+# For every test
+repo = BookRepository.new
+books = repo.all
 
-repo = StudentRepository.new
+# 1 Gets data of the right type
+# It should be an array
+expect(books.class).to eq Array
+# Eveery element of the array should be a Book object
+all_books = books.all? { |el| el.class == Book }
+expect(all_books).to eq true
 
-students = repo.all
+# 2 Gets the right data
+books.length # =>  2
 
-students.length # =>  2
+books[0].id # =>  1
+books[0].title # =>  'Nineteen Eighty-Four'
+books[0].author_name # =>  'George Orwell'
 
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
-
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
-
-# 2
-# Get a single student
-
-repo = StudentRepository.new
-
-student = repo.find(1)
-
-student.id # =>  1
-student.name # =>  'David'
-student.cohort_name # =>  'April 2022'
+books[1].id # =>  2
+books[1].title # =>  'Mrs Dalloway'
+books[1].author_name # => 'Virginia Woolf'
 
 # Add more examples for each method
 ```
